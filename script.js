@@ -34,9 +34,9 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
   server.on_connect = function() {
       console.log("Connected to the server in room:", room);
       updateContactList(server.username, "add"); // Add yourself to the contact list
-  };
+};
 
-  server.on_user_connected = function(new_user_id) {
+server.on_user_connected = function(new_user_id) {
     console.log("New user connected:", new_user_id);
     // If not yourself, send a history message to the new user
     if (new_user_id !== server.user_id) {
@@ -56,7 +56,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
       server.sendMessage(JSON.stringify(joinMessage));
   }
 };
-  server.on_user_disconnected = function(user_id) {
+server.on_user_disconnected = function(user_id) {
     console.log("User disconnected:", user_id);
     if (userIdToNameMap[user_id]) {
       var username = userIdToNameMap[user_id].username;
@@ -64,7 +64,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
       delete userIdToNameMap[user_id]; // Remove users from the mapping
     }
   };
-  server.on_message = function(author_id, msg) {
+server.on_message = function(author_id, msg) {
       var parsedMsg;
       try {
           parsedMsg = JSON.parse(msg);
@@ -97,30 +97,30 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
       }
   };
 
-  server.on_ready = function(my_id) {
-      server.user_id = my_id; // Store the user's own ID
-      var joinMessage = {
+server.on_ready = function(my_id) {
+    server.user_id = my_id; // Store the user's own ID
+    var joinMessage = {
           type: "text",
           username: username,
           message: username + " joined the chat.",
           avatar: avatar
-      };
-      server.sendMessage(JSON.stringify(joinMessage));
-        // Creating a message with new user information
-      var myInfoMessage = {
+    };
+    server.sendMessage(JSON.stringify(joinMessage));
+    // Creating a message with new user information
+    var myInfoMessage = {
           type: "myInfo",
           username: localStorage.getItem('username'),
           avatar: localStorage.getItem('avatar')
-      };
-      // Sending a message using the broadcast function
-      server.sendMessage(JSON.stringify(myInfoMessage)); 
-  };
+    };
+    // Sending a message using the broadcast function
+    server.sendMessage(JSON.stringify(myInfoMessage)); 
+};
 
-  document.querySelector('.loginPage').style.display = 'none';
-  document.getElementById('chatPage').style.display = 'block';
+document.querySelector('.loginPage').style.display = 'none';
+document.getElementById('chatPage').style.display = 'block';
 
-  // Bind an event listener for the Enter key to send a message.
-  document.getElementById('messageInput').addEventListener('keypress', function(event) {
+// Bind an event listener for the Enter key to send a message.
+document.getElementById('messageInput').addEventListener('keypress', function(event) {
     if (event.key === "Enter") {
       sendMessage();
       event.preventDefault();
@@ -149,45 +149,45 @@ function sendMessage() {
 }
 
 function appendMessageToChat(username, message, avatar) {
-  var chatMessages = document.querySelector('.chat-messages');
-  var messageElement = document.createElement('div');
-  messageElement.classList.add('message');
+    var chatMessages = document.querySelector('.chat-messages');
+    var messageElement = document.createElement('div');
+    messageElement.classList.add('message');
 
-  var usernameElement = document.createElement('div');
-  usernameElement.classList.add('message-username');
-  usernameElement.textContent = username + ": ";
-  messageElement.appendChild(usernameElement);
+    var usernameElement = document.createElement('div');
+    usernameElement.classList.add('message-username');
+    usernameElement.textContent = username + ": ";
+    messageElement.appendChild(usernameElement);
 
-  var textElement = document.createElement('div');
-  textElement.classList.add('message-text');
-  textElement.textContent = message;
-  messageElement.appendChild(textElement);
+    var textElement = document.createElement('div');
+    textElement.classList.add('message-text');
+    textElement.textContent = message;
+    messageElement.appendChild(textElement);
 
-  var avatarImg = document.createElement('img');
-  avatarImg.src = avatar;
-  avatarImg.classList.add('message-avatar');
-  messageElement.appendChild(avatarImg);
+    var avatarImg = document.createElement('img');
+    avatarImg.src = avatar;
+    avatarImg.classList.add('message-avatar');
+    messageElement.appendChild(avatarImg);
 
-  chatMessages.appendChild(messageElement);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+    chatMessages.appendChild(messageElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 function updateContactList(username, action) {
-  var contactsDiv = document.querySelector('.Contacts');
-  console.log("Updating contact list for:", username, "Action:", action); // Debugging Information
-  if (action === "add") {
-    var contactElement = document.createElement("div");
-    contactElement.classList.add("contact");
-    contactElement.textContent = username;
-    contactsDiv.appendChild(contactElement);
-  } else if (action === "remove") {
-    // Remove user from contact list
-    var contacts = contactsDiv.getElementsByClassName("contact");
-    for (var i = 0; i < contacts.length; i++) {
-      if (contacts[i].textContent === username) {
-        contactsDiv.removeChild(contacts[i]);
-        break;
+    var contactsDiv = document.querySelector('.Contacts');
+    console.log("Updating contact list for:", username, "Action:", action); // Debugging Information
+    if (action === "add") {
+      var contactElement = document.createElement("div");
+      contactElement.classList.add("contact");
+      contactElement.textContent = username;
+      contactsDiv.appendChild(contactElement);
+    } else if (action === "remove") {
+      // Remove user from contact list
+      var contacts = contactsDiv.getElementsByClassName("contact");
+      for (var i = 0; i < contacts.length; i++) {
+        if (contacts[i].textContent === username) {
+          contactsDiv.removeChild(contacts[i]);
+          break;
+        }
       }
     }
-  }
 }
