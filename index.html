@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="loginPage">
+        <div id="loginPage" style="display: block;">
+            <form id="loginForm" class="loginForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required>
+                <label for="room">Room:</label>
+                <input type="text" id="room" required>
+                <label for="avatarSelect">Choose an avatar:</label>
+                <select id="avatarSelect">
+                    <!-- Options will be generated dynamically -->
+                </select>
+                <button type="submit">Connect</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="chatPage" style="display: none; height: 100%;">
+        <!-- Chat room goes here -->
+        <div class="container">
+            <div class="Contacts">
+                <h3>Contacts</h3>
+                <hr>
+                <div id="contactList">
+                    <!-- 动态添加的联系人将会出现在这里 -->
+                </div>
+            </div>
+            <div class="chat-room">
+                <div class="chat-messages">
+                    <h3>Messages</h3>
+                    <hr>
+                    <!-- Messages will be displayed here -->
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Type a message">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="sillyclient.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -18,3 +18,4 @@ function sendMessage() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 }
+
