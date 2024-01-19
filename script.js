@@ -33,12 +33,12 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 
   server.on_connect = function() {
       console.log("Connected to the server in room:", room);
-      updateContactList(server.username, "add"); // 将自己添加到联系人列表
+      updateContactList(server.username, "add"); // Add yourself to the contact list
   };
 
   server.on_user_connected = function(new_user_id) {
     console.log("New user connected:", new_user_id);
-    // 如果不是自己，则发送历史消息给新用户
+    // If not yourself, send a history message to the new user
     if (new_user_id !== server.user_id) {
       var historyMessage = {
           type: "history",
@@ -46,13 +46,13 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
       };
       server.sendMessage(JSON.stringify(historyMessage), [new_user_id]);
       
-      // 同时发送当前用户的加入信息
+      // Also sends the current user's join message
       var joinMessage = {
           type: "join",
           username: server.username,
           avatar: server.avatar
       };
-      console.log("Sending join message for:", server.username); // 调试信息
+      console.log("Sending join message for:", server.username); // Debugging Information
       server.sendMessage(JSON.stringify(joinMessage));
   }
 };
@@ -60,8 +60,8 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     console.log("User disconnected:", user_id);
     if (userIdToNameMap[user_id]) {
       var username = userIdToNameMap[user_id].username;
-      updateContactList(username, "remove"); // 从联系人列表中移除用户
-      delete userIdToNameMap[user_id]; // 从映射中移除用户
+      updateContactList(username, "remove"); // Removing users from the contact list
+      delete userIdToNameMap[user_id]; // Remove users from the mapping
     }
   };
   server.on_message = function(author_id, msg) {
@@ -73,32 +73,32 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
           return;
       }
       if (parsedMsg.type === "text") {
-        // 处理实时聊天消息
+        // Handling real-time chat messages
         appendMessageToChat(parsedMsg.username, parsedMsg.message, parsedMsg.avatar);
-        // 添加消息到历史记录
+        // Add message to history
         chatHistory.push(parsedMsg);
       } else if (parsedMsg.type === "history") {
-        // 这里是收到历史消息时的处理，可能不需要在客户端做任何事
+        // Here's what to do when you receive a history message,
         parsedMsg.content.forEach(function(historyMsg) {
           appendMessageToChat(historyMsg.username, historyMsg.message, historyMsg.avatar);
           });
       } else if (parsedMsg.type === "join") {
-        // 处理加入类型的消息1
+        // Handling of accession type messages1
         console.log("Processing join message for:", parsedMsg.username);
         userIdToNameMap[author_id] = { username: parsedMsg.username, avatar: parsedMsg.avatar };
-        updateContactList(parsedMsg.username, "add"); // 更新联系人列表
+        updateContactList(parsedMsg.username, "add"); //  Updating the contact list
       } else if (parsedMsg.type === "myInfo") {
-        // 处理加入类型的消息2
+        // Handling of accession type messages2
         console.log("Processing myInfo message for:", parsedMsg.username);
         userIdToNameMap[author_id] = { username: parsedMsg.username, avatar: parsedMsg.avatar };
-        updateContactList(parsedMsg.username, "add"); // 更新联系人列表
+        updateContactList(parsedMsg.username, "add"); //  Updating the contact list
       } else {
         console.log("Received unknown type of message:", parsedMsg);
       }
   };
 
   server.on_ready = function(my_id) {
-      server.user_id = my_id; // 存储用户自己的ID
+      server.user_id = my_id; // Store the user's own ID
       var joinMessage = {
           type: "text",
           username: username,
@@ -106,20 +106,20 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
           avatar: avatar
       };
       server.sendMessage(JSON.stringify(joinMessage));
-        // 创建包含新用户信息的消息
+        // Creating a message with new user information
       var myInfoMessage = {
           type: "myInfo",
           username: localStorage.getItem('username'),
           avatar: localStorage.getItem('avatar')
       };
-      // 使用广播函数发送消息
-      server.sendMessage(JSON.stringify(myInfoMessage)); // 这会将消息发送给所有其他用户
+      // Sending a message using the broadcast function
+      server.sendMessage(JSON.stringify(myInfoMessage)); 
   };
 
   document.querySelector('.loginPage').style.display = 'none';
   document.getElementById('chatPage').style.display = 'block';
 
-  // 绑定回车键发送消息的事件监听器
+  // Bind an event listener for the Enter key to send a message.
   document.getElementById('messageInput').addEventListener('keypress', function(event) {
     if (event.key === "Enter") {
       sendMessage();
@@ -142,7 +142,7 @@ function sendMessage() {
             avatar: avatar
         };
         server.sendMessage(JSON.stringify(msgObject));
-        chatHistory.push(msgObject); // 将消息添加到历史记录
+        chatHistory.push(msgObject); // Adding messages to the history
         appendMessageToChat(username, message, avatar);
         input.value = '';
     }
@@ -174,14 +174,14 @@ function appendMessageToChat(username, message, avatar) {
 
 function updateContactList(username, action) {
   var contactsDiv = document.querySelector('.Contacts');
-  console.log("Updating contact list for:", username, "Action:", action); // 调试信息
+  console.log("Updating contact list for:", username, "Action:", action); // Debugging Information
   if (action === "add") {
     var contactElement = document.createElement("div");
     contactElement.classList.add("contact");
     contactElement.textContent = username;
     contactsDiv.appendChild(contactElement);
   } else if (action === "remove") {
-    // 移除用户从联系人列表
+    // Remove user from contact list
     var contacts = contactsDiv.getElementsByClassName("contact");
     for (var i = 0; i < contacts.length; i++) {
       if (contacts[i].textContent === username) {
