@@ -6,7 +6,7 @@ e-mail: maolin.li01@estudiant.upf.edu
 
 student number: u217931
 
-Funtion overview:
+Chatroom Overview:
 
 1. Avatar Selection: It begins by populating a dropdown menu (`avatarSelect`) with avatar choices from a predefined array (`avatars`). Users can select an avatar from this menu.
 
