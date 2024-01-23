@@ -3,6 +3,7 @@ This is a chatroom assignment from https://docs.google.com/presentation/d/1rqqRO
 
 Myinfo:
 e-mail:maolin.li01@estudiant.upf.edu
+
 student number: u217931
 
 Funtion overview:
