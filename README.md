@@ -2,6 +2,7 @@
 This is a chatroom assignment from https://docs.google.com/presentation/d/1rqqRO7ZV5ioQaTBWCO4Lhp8ip2QzSkrIWwUKRAC0F9U/edit#slide=id.gaf8a365159_0_5
 
 Myinfo:
+
 e-mail: maolin.li01@estudiant.upf.edu
 
 student number: u217931
